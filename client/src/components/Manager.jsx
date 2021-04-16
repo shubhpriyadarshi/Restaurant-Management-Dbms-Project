@@ -1,10 +1,13 @@
 import React, { Component, useState } from "react";
 import User from "../images/User.png";
 import Axios from "axios";
+import { Redirect } from "react-router-dom";
 
 const Manager = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [info, setinfo] = useState([]);
+  const [message, setmessage] = useState("Wrong Manager Details");
 
   const loginManager = () => {
     Axios.post("http://localhost:3001/manager", {
@@ -12,6 +15,8 @@ const Manager = () => {
       password: password,
     }).then((response) => {
       console.log(response);
+      setinfo(response.data);
+      setmessage(info.message);
     });
   };
 
@@ -65,6 +70,12 @@ const Manager = () => {
                   value="Clear"
                 ></input>
               </div>
+              <button
+                className="btn btn-secondary btn-sm m-2"
+                hidden={message === "Wrong Manager Details" ? "hidden" : ""}
+              >
+                <a href="/mDash">MDash</a>
+              </button>
             </div>
           </form>
         </centre>

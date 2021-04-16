@@ -9,6 +9,10 @@ import SignUp from "./SignUp";
 import Manager from "./Manager";
 import CDash from "./CDash";
 import Payment from "./Payment";
+import ManagerDash from "./ManagerDash";
+import StaffPerformance from "./StaffPerformance";
+import EmployeeDash from "./EmployeeDash";
+import AddStaff from "./AddStaff";
 
 function CAll() {
   return (
@@ -17,6 +21,13 @@ function CAll() {
       <div className="content">
         <Router>
           <Switch>
+            <Route
+              path={"/manager/staffPerformance"}
+              component={StaffPerformance}
+            />
+            <Route path={"/mDash"} component={ManagerDash} />
+            <Route path={"/AddStaff"} component={AddStaff} />
+            <Route path={"/eDash"} component={EmployeeDash} />
             <Route path={"/customer/signUp"} component={SignUp} />
             <Route path={"/payment"} component={Payment} />
             <Route path={"/customer"} component={Customer} />

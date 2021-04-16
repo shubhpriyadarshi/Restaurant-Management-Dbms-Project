@@ -2,7 +2,7 @@ const express = require("express");
 const mysql = require("mysql");
 const app = express();
 const cors = require("cors");
-const PORT = 3003;
+const PORT = 3002;
 
 app.use(cors());
 app.use(express.json());
@@ -14,43 +14,41 @@ const db = mysql.createConnection({
   database: "dbms",
 });
 
-app.get("/managerInfo", (req, res) => {
-  db.query("SELECT * FROM Manager", (err, result) => {
+app.get("/employeesInfo", (req, res) => {
+  db.query("SELECT * FROM staff", (err, result) => {
     if (err) {
       console.log({ err: err });
-      res.send("Some error occured while connecting to database");
+      res.send("Error Encountered");
     }
     if (result.length > 0) {
       res.send(result);
-      res.send({ message: "Manager Approved" });
     } else {
-      res.send({ message: "No Manager Present" });
+      res.send({ message: "Cannot Insert Check Format Again" });
     }
   });
 });
 
-app.post("/manager", (req, res) => {
+app.post("/employeeInfo", (req, res) => {
   console.log(req.body);
-  const email = req.body.email;
-  const password = req.body.password;
+  const name = req.body.name;
 
   db.query(
-    "SELECT * FROM Manager WHERE emailId= ? AND password= ?",
-    [email, password],
+    "SELECT * FROM Staff WHERE StaffName= ?",
+    "Vedang",
     (err, result) => {
       if (err) {
         console.log({ err: err });
-        res.send("Some error occured while connecting to database");
+        res.send("Error Occured");
       }
       if (result.length > 0) {
         res.send(result);
       } else {
-        res.send({ message: "Wrong Manager Details" });
+        res.send({ message: "Not a Staff" });
       }
     }
   );
 });
 
 app.listen(PORT, () => {
-  console.log("running server on port", PORT);
+  console.log("running server on port ", PORT);
 });

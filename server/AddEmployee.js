@@ -2,7 +2,7 @@ const express = require("express");
 const mysql = require("mysql");
 const app = express();
 const cors = require("cors");
-const PORT = 3002;
+const PORT = 3005;
 
 app.use(cors());
 app.use(express.json());
@@ -14,17 +14,17 @@ const db = mysql.createConnection({
   database: "dbms",
 });
 
-app.post("/create-user", (req, res) => {
+app.post("/createEmployee", (req, res) => {
   console.log(req.body);
+  const id = req.body.id;
   const name = req.body.name;
-  const userId = req.body.phonenumber;
   const password = req.body.password;
-  const email = req.body.email;
-  const phonenumber = req.body.phonenumber;
+  const numoforders = req.body.noOfOrders;
+  const date = req.body.date;
 
   db.query(
-    "INSERT INTO customer (CustomerId, Name, Email, Password, PhoneNumber) VALUES (?,?,?,?,?)",
-    [userId, name, email, password, phonenumber],
+    "INSERT INTO staff (EmployeeId, StaffName, Password, NumberofOrders, CheckupDate) VALUES (?,?,?,?,?)",
+    [id, name, password, numoforders, date],
     (err, result) => {
       if (err) {
         console.log({ err: err });
@@ -33,7 +33,7 @@ app.post("/create-user", (req, res) => {
       if (result.length > 0) {
         res.send(result);
       } else {
-        res.send({ message: "Cannot Insert Check Details Again" });
+        res.send({ message: "Cannot Insert Check Format Again" });
       }
     }
   );
