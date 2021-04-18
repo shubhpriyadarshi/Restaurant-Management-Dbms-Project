@@ -54,7 +54,7 @@ app.post("/resetnoOfOrders", (req, res) => {
 });
 
 app.post("/menu", (req, res) => {
-  db.query("SELECT UnitPrice, FoodName FROM Menu", (err, result) => {
+  db.query("SELECT * FROM Menu", (err, result) => {
     if (err) {
       console.log({ err: err });
       res.send({ err: err });

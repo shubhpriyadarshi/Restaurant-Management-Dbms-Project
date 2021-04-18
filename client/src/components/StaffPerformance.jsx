@@ -29,6 +29,7 @@ class StaffPerformance extends Component {
       noOfOrders: this.state.noOfOrders,
     }).then((response) => {
       console.log(response);
+      this.getEmployee();
       console.log("Transaction Successful");
     });
   };
@@ -84,7 +85,7 @@ class StaffPerformance extends Component {
             aria-current="true"
             style={{ textAlign: "center" }}
           >
-            Add Employee
+            Update Employee Booked Tables
           </li>
           <table
             className="table"

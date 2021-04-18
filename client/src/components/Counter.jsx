@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 class Counter extends Component {
   render() {
     console.log("props", this.props);
-    const { counter, onIncrement, onDecrement, onDelete } = this.props;
+    const { food, onIncrement, onDecrement } = this.props;
     return (
       <div>
         <div className="row">
@@ -13,23 +13,17 @@ class Counter extends Component {
           </div>
           <div className="col">
             <button
-              onClick={() => onIncrement(counter)}
+              onClick={() => onIncrement(food)}
               className="btn btn-secondary btn-sm"
             >
               +
             </button>
             <button
-              onClick={() => onDecrement(counter)}
+              onClick={() => onDecrement(food)}
               className="btn btn-secondary btn-sm m-2"
-              disabled={counter.value === 0 ? "disabled" : ""}
+              disabled={food.qty === 0 ? "disabled" : ""}
             >
               -
-            </button>
-            <button
-              onClick={() => onDelete(counter.id)}
-              className="bnt btn-danger btn-sm"
-            >
-              Delete
             </button>
           </div>
         </div>
@@ -39,13 +33,13 @@ class Counter extends Component {
 
   getBadgeClasses() {
     let classes = "badge m-2 badge-";
-    classes += this.props.counter.value === 0 ? "warning" : "primary";
+    classes += this.props.food.qty === 0 ? "warning" : "primary";
     return classes;
   }
 
   formatCount() {
-    const { value } = this.props.counter;
-    return value === 0 ? "Zero" : value;
+    const { qty } = this.props.food;
+    return qty === 0 ? "Zero" : qty;
   }
 }
 

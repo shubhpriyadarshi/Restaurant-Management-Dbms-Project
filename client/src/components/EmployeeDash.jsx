@@ -13,12 +13,13 @@ class EmployeeDash extends Component {
     emprec: [],
   };
 
-  loginCustomer() {
+  getEmployee = () => {
     Axios.post("http://localhost:3001/employeeInfo", {}).then((response) => {
       console.log(response);
-      this.setState({ emprec: response.data });
+      this.setState({ employee: response.data });
+      console.log(this.state.employee);
     });
-  }
+  };
 
   getSalary = () => {
     this.state.salary = this.state.employee.noOfOrders * 100;
@@ -83,13 +84,14 @@ class EmployeeDash extends Component {
           <table className="table table-bordered border-primary table-success">
             <thead>
               <tr>
-                <td>DATE</td>
+                <td>Rich</td>
               </tr>
             </thead>
           </table>
         </div>
         <button
           className="w-100 btn btn-info"
+          onClick={this.getEmployee}
           type="button"
           style={{ marginTop: 20 }}
         >

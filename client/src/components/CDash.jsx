@@ -2,29 +2,17 @@ import React, { Component, useState } from "react";
 import Axios from "axios";
 import Counter from "./Counter";
 
-function CDash() {
+function CDash(props) {
   const [foodDetails, setfoodDetails] = useState([]);
-  const [price, setprice] = useState([]);
-  const [quantity, setquantity] = useState([]);
-  const [totalPrice, settotalPrice] = useState([]);
   const [priceList, setpriceList] = useState([]);
-  const [counter, setcounter] = useState([
-    { id: 1, value: 0 },
-    { id: 2, value: 0 },
-    { id: 3, value: 0 },
-    { id: 4, value: 0 },
-    { id: 5, value: 0 },
-    { id: 6, value: 0 },
-  ]);
-  const [combined, setcombined] = useState([]);
-
-  let xyz = "dbms";
+  const [price, setprice] = useState(0);
 
   const getMenu = () => {
     Axios.post("http://localhost:3001/menu", {}).then((response) => {
-      setfoodDetails(response.data);
+      setfoodDetails(
+        response.data.map((foodDetails) => ({ ...foodDetails, qty: 0 }))
+      );
       console.log(response);
-      console.log(foodDetails);
       console.log(foodDetails);
     });
   };
@@ -37,53 +25,69 @@ function CDash() {
     });
   };
 
-  const onIncrement = (counter) => {
-    console.log("Increment", counter);
-    const counters = [...counters];
-    const index = counters.indexOf(counter);
-    counters[index] = { ...counter };
-    counters[index].value++;
-    /* setState({ counters }); */
+  const onIncrement = (food) => {
+    console.log("Increment", food);
+    const foods = [...foodDetails];
+    const index = foods.indexOf(food);
+    foods[index] = { ...food };
+    foods[index].qty++;
+    setfoodDetails(foods);
   };
 
-  const onDecrement = (counter) => {
-    console.log("Decrement", counter);
-    const counters = [...counters];
-    const index = counters.indexOf(counter);
-    counters[index] = { ...counter };
-    counters[index].value--;
-    /* setState({ counters }); */
+  const onDecrement = (food) => {
+    console.log("Decrement", food);
+    const foods = [...foodDetails];
+    const index = foods.indexOf(food);
+    foods[index] = { ...food };
+    foods[index].qty--;
+    setfoodDetails(foods);
   };
 
-  const onReset = () => {
-    const counters = counters.map((c) => {
-      c.value = 0;
-      return c;
+  const calculatePrice = () => {
+    setprice(
+      foodDetails[0].qty * foodDetails[0].UnitPrice +
+        foodDetails[1].qty * foodDetails[1].UnitPrice +
+        foodDetails[2].qty * foodDetails[2].UnitPrice +
+        foodDetails[3].qty * foodDetails[3].UnitPrice +
+        foodDetails[4].qty * foodDetails[4].UnitPrice +
+        foodDetails[5].qty * foodDetails[5].UnitPrice
+    );
+    /* foodDetails.map((food) => ({ ...food, qty:})) */
+    console.log(price);
+  };
+
+  const sendOrder = () => {
+    Axios.post("http://localhost:3001/place-order", {
+      email: props.email,
+      password: props.password,
+      f1: foodDetails[0].qty,
+      f2: foodDetails[1].qty,
+      f3: foodDetails[2].qty,
+      f4: foodDetails[3].qty,
+      f5: foodDetails[4].qty,
+      f6: foodDetails[5].qty,
+    }).then((response) => {
+      console.log(response);
     });
-    /* setState({ counters }); */
-  };
-
-  const onDelete = (counterId) => {
-    console.log("Event Handler Called", counterId);
-    const counters = counters.filter((c) => c.id !== counterId);
-    /* setState({ counters }); */
   };
 
   return (
     <div className="container">
       <h1>Dashboard</h1>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button onClick={getMenu} class="btn btn-primary me-md-2" type="button">
-          Get Menu
-        </button>
-      </div>
       <ul className="list-group">
         <li className="list-group-item active" aria-current="true">
           Menu
         </li>
-        <button onClick={onReset} className="btn btn-primary btn-sm m-2">
-          Reset
-        </button>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button
+            onClick={getMenu}
+            className="btn btn-primary me-md-2"
+            type="button"
+            style={{ marginTop: 10 }}
+          >
+            Get Menu
+          </button>
+        </div>
         <table className="table">
           <tbody>
             {foodDetails.map((food) => (
@@ -92,13 +96,11 @@ function CDash() {
                   <li className="list-group-item">
                     <form>
                       <label for="quantity"> {food.FoodName} </label>
-
                       <Counter
-                        key={Counter.id}
-                        onDelete={onDelete}
+                        key={food.FoodName}
                         onIncrement={onIncrement}
                         onDecrement={onDecrement}
-                        counter={Counter}
+                        food={food}
                       />
                       <label style={{ marginLeft: "50px" }} for="price">
                         Unit Price:{" "}
@@ -122,15 +124,24 @@ function CDash() {
       >
         Calculate Total
       </button>
-      <a href="/home" className="href">
+      <a href="#" className="href">
         <button
           className="w-100 btn btn-success"
           type="button"
           style={{ marginTop: 20 }}
+          onClick={sendOrder}
         >
           Proceed to Payment
         </button>
       </a>
+      <button
+        className="w-100 btn btn-success"
+        type="button"
+        style={{ marginTop: 20 }}
+        onClick={calculatePrice}
+      >
+        Get Price
+      </button>
       {priceList.map((pList) => {
         return (
           <div>
@@ -150,10 +161,10 @@ function CDash() {
           </thead>
           <tbody className="">
             <tr>
-              <td>{xyz}</td>
-              <td>{xyz}</td>
-              <td>{xyz}</td>
-              <td> {xyz}</td>
+              <td>{price}</td>
+              <td>{price}</td>
+              <td>{price}</td>
+              <td> {price}</td>
             </tr>
           </tbody>
         </table>
