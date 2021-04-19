@@ -72,7 +72,7 @@ function SignUp() {
               size="35"
             />
             <br />
-            <a onClick={addCustomer} href="">
+            <a onClick={addCustomer} href="#">
               <input
                 className="btn_Next"
                 type="button"
