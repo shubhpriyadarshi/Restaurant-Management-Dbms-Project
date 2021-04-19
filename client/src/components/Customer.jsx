@@ -8,6 +8,7 @@ import Counter from "./Counter";
 
 function Customer() {
   const [customer, setcustomer] = useState("");
+  const [employees, setemployees] = useState([]);
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [date, setdate] = useState();
@@ -65,6 +66,14 @@ function Customer() {
 
   const evaluation = () => {
     setdiscount(price >= 2000 ? 0.1 : 0);
+  };
+
+  const getEmployees = () => {
+    Axios.get("http://localhost:3001/getStaff", {}).then((response) => {
+      console.log(response);
+      setemployees(response.data);
+      console.log(employees);
+    });
   };
 
   const calculatePrice = () => {
@@ -260,11 +269,11 @@ function Customer() {
           </div>
 
           <button
-            onClick={getPrice}
+            onClick={getEmployees}
             className="w-100 btn btn-primary"
             type="button"
           >
-            Calculate Total
+            View All Employees
           </button>
           <a href="#" className="href">
             <button
@@ -284,11 +293,34 @@ function Customer() {
           >
             Get Price
           </button>
-          {priceList.map((pList) => {
+          <table
+            className="table container w-50"
+            style={{ marginTop: 40, textAlign: "center" }}
+          >
+            <thead>
+              <tr className="">
+                <td className="table-info">EmployeeId</td>
+              </tr>
+              <tr className="">
+                <td className="table-warning">StaffName</td>
+              </tr>
+            </thead>
+          </table>
+          {employees.map((employee) => {
             return (
-              <div>
-                <h3>{pList.UnitPrice}</h3>
-              </div>
+              <table
+                className="table container w-50"
+                style={{ textAlign: "center" }}
+              >
+                <tbody>
+                  <tr className="">
+                    <td className="table-info">{employee.EmployeeId}</td>
+                  </tr>
+                  <tr className="">
+                    <td className="table-warning">{employee.StaffName}</td>
+                  </tr>
+                </tbody>
+              </table>
             );
           })}
           <div className="container">
